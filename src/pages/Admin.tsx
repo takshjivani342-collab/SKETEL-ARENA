@@ -15,6 +15,7 @@ import { formatMatchTime } from '../utils/dateUtils';
 import SafeImage from '../components/SafeImage';
 import { uploadOriginalImage } from '../utils/imageCompressor';
 import AdminNotificationsTab from '../components/AdminNotificationsTab';
+import AdminModes from './AdminModes';
 
 import { 
   collection, doc, onSnapshot, updateDoc, deleteDoc,
@@ -2193,6 +2194,17 @@ export default function AdminPage({ onPageChange }: AdminPageProps) {
                   </div>
                 ))}
               </div>
+            </motion.div>
+          )}
+
+          {activeTab === AdminTab.MODES && (
+            <motion.div
+              key="modes"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <AdminModes onPageChange={onPageChange} embedded />
             </motion.div>
           )}
 

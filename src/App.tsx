@@ -465,10 +465,11 @@ export default function App() {
     );
   }
 
-  // Derive currentPage for components that still need it
+  // Derive currentPage for components that still need it (longest prefix first)
   const currentPath = location.pathname;
   let currentPage = Page.HOME;
-  for (const [path, page] of Object.entries(pathToPage)) {
+  const sortedPaths = Object.entries(pathToPage).sort((a, b) => b[0].length - a[0].length);
+  for (const [path, page] of sortedPaths) {
     if (currentPath.startsWith(path)) {
       currentPage = page;
       break;
@@ -493,7 +494,7 @@ export default function App() {
 
   // Pages that display header/nav
   const showChrome = isLoggedIn && !['/login', '/signup'].includes(location.pathname);
-  const showHeader = showChrome && !['/home', '/tournaments', '/match/', '/match-details/', '/wallet/add', '/wallet/withdraw', '/admin', '/referral', '/profile/details', '/profile/stats', '/game-modes', '/profile'].some(p => location.pathname.startsWith(p));
+  const showHeader = showChrome && !['/home', '/tournaments', '/match/', '/match-details/', '/wallet/add', '/wallet/withdraw', '/admin', '/referral', '/profile/details', '/profile/stats', '/game-modes', '/profile', '/leaderboard'].some(p => location.pathname.startsWith(p));
   const showNav = showChrome && !['/match/', '/match-details/', '/admin/match/'].some(p => location.pathname.startsWith(p));
 
   return (
@@ -523,7 +524,13 @@ export default function App() {
               
               <Route path="/home" element={
                 <ProtectedRoute>
-                  <Home user={user} onPageChange={handlePageChange} joinedMatchIds={joinedMatchIds} />
+                  <Home user={user!} onPageChange={handlePageChange} joinedMatchIds={joinedMatchIds} />
+                </ProtectedRoute>
+              } />
+
+              <Route path="/game-modes" element={
+                <ProtectedRoute>
+                  <GameModes onPageChange={handlePageChange} />
                 </ProtectedRoute>
               } />
 
@@ -545,6 +552,7 @@ export default function App() {
                 </ProtectedRoute>
               } />
 
+              <Route path="/match-details" element={<Navigate to="/tournaments" replace />} />
               <Route path="/match-details/:id" element={
                 <ProtectedRoute>
                   <MatchDetails 
@@ -555,6 +563,7 @@ export default function App() {
                 </ProtectedRoute>
               } />
 
+              <Route path="/match" element={<Navigate to="/tournaments" replace />} />
               <Route path="/match/:id" element={
                 <ProtectedRoute>
                   <JoinMatch 
@@ -568,7 +577,7 @@ export default function App() {
 
               <Route path="/wallet" element={
                 <ProtectedRoute>
-                  <WalletPage user={user} onPageChange={handlePageChange} />
+                  <WalletPage user={user!} onPageChange={handlePageChange} />
                 </ProtectedRoute>
               } />
 
@@ -580,13 +589,13 @@ export default function App() {
 
               <Route path="/wallet/withdraw" element={
                 <ProtectedRoute>
-                  <Withdraw user={user} onPageChange={handlePageChange} />
+                  <Withdraw user={user!} onPageChange={handlePageChange} />
                 </ProtectedRoute>
               } />
 
               <Route path="/profile" element={
                 <ProtectedRoute>
-                  <ProfilePage user={user} onPageChange={handlePageChange} onLogout={handleLogout} />
+                  <ProfilePage user={user!} onPageChange={handlePageChange} onLogout={handleLogout} />
                 </ProtectedRoute>
               } />
 
@@ -614,12 +623,14 @@ export default function App() {
                 </ProtectedRoute>
               } />
 
+              <Route path="/admin/user" element={<Navigate to="/admin" replace />} />
               <Route path="/admin/user/:id" element={
                 <ProtectedRoute>
                   <AdminUserDetail onPageChange={handlePageChange} />
                 </ProtectedRoute>
               } />
 
+              <Route path="/admin/match/edit" element={<Navigate to="/admin" replace />} />
               <Route path="/admin/match/edit/:id" element={
                 <ProtectedRoute>
                   <AdminEditMatch onPageChange={handlePageChange} />
@@ -646,7 +657,7 @@ export default function App() {
 
               <Route path="/leaderboard" element={
                 <ProtectedRoute>
-                  <Leaderboard />
+                  <Leaderboard onPageChange={handlePageChange} />
                 </ProtectedRoute>
               } />
 

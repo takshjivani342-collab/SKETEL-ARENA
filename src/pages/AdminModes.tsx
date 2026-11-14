@@ -24,6 +24,7 @@ export interface GameMode {
 
 interface AdminModesProps {
   onPageChange: (page: Page) => void;
+  embedded?: boolean;
 }
 
 // Curated High-Definition Preset Covers for Easy Selection
@@ -78,7 +79,7 @@ const SUGGESTED_SUBTITLES = [
   'Custom Room', 'Survival Arena', 'Ranked Esports', 'Special Event'
 ];
 
-export default function AdminModes({ onPageChange }: AdminModesProps) {
+export default function AdminModes({ onPageChange, embedded = false }: AdminModesProps) {
   const [selectedGameId, setSelectedGameId] = useState<string>(GAMES[0].id);
   const [modes, setModes] = useState<GameMode[]>([]);
   const [loading, setLoading] = useState(true);
@@ -309,33 +310,58 @@ export default function AdminModes({ onPageChange }: AdminModesProps) {
   );
 
   return (
-    <div className="pb-24 max-w-lg mx-auto bg-black min-h-screen text-white">
+    <div className={embedded ? "text-white" : "pb-24 max-w-lg mx-auto bg-black min-h-screen text-white"}>
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-black/90 backdrop-blur-md px-5 h-16 flex items-center justify-between border-b border-white/5">
-        <div className="flex items-center gap-4">
+      {!embedded ? (
+        <header className="sticky top-0 z-40 bg-black/90 backdrop-blur-md px-5 h-16 flex items-center justify-between border-b border-white/5">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => onPageChange(Page.ADMIN)}
+              className="p-2 -ml-2 text-neutral-400 hover:text-white active:scale-95 transition-all"
+            >
+              <ArrowLeft size={22} />
+            </button>
+            <div>
+              <h1 className="text-base font-extrabold tracking-tight uppercase">Game Modes</h1>
+              <p className="text-[8px] font-black uppercase tracking-widest text-neutral-500">Configure Arena Modes</p>
+            </div>
+          </div>
+
           <button 
-            onClick={() => onPageChange(Page.ADMIN)}
-            className="p-2 -ml-2 text-neutral-400 hover:text-white active:scale-95 transition-all"
+            onClick={handleSeedDefaults}
+            disabled={isSeeding}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-neutral-900 border border-purple-500/30 text-purple-400 hover:bg-purple-600 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
           >
-            <ArrowLeft size={22} />
+            {isSeeding ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+            <span>Preset Modes</span>
           </button>
+        </header>
+      ) : (
+        <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-base font-extrabold tracking-tight uppercase">Game Modes</h1>
-            <p className="text-[8px] font-black uppercase tracking-widest text-neutral-500">Configure Arena Modes</p>
+            <h3 className="text-sm font-black italic uppercase tracking-tight text-white">Game Modes Manager</h3>
+            <p className="text-[8px] font-black uppercase tracking-widest text-purple-400">Add, edit or upload mode photos</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={handleSeedDefaults}
+              disabled={isSeeding}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-neutral-900 border border-purple-500/30 text-purple-400 hover:bg-purple-600 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
+            >
+              {isSeeding ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
+              <span>Preset Modes</span>
+            </button>
+            <button
+              onClick={() => onPageChange(Page.ADMIN_MODES)}
+              className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-neutral-300 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+            >
+              Full View
+            </button>
           </div>
         </div>
+      )}
 
-        <button 
-          onClick={handleSeedDefaults}
-          disabled={isSeeding}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-neutral-900 border border-purple-500/30 text-purple-400 hover:bg-purple-600 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all active:scale-95 disabled:opacity-50"
-        >
-          {isSeeding ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} />}
-          <span>Preset Modes</span>
-        </button>
-      </header>
-
-      <section className="px-5 py-6 space-y-6">
+      <section className={embedded ? "space-y-6" : "px-5 py-6 space-y-6"}>
         {/* Game Selector */}
         <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
           {GAMES.map(game => (

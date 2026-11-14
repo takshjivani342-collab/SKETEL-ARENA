@@ -13,6 +13,7 @@ import {
   ShieldAlert,
   LogOut,
   ChevronRight,
+  Trophy,
   X
 } from 'lucide-react';
 import { Page, User } from '../types';
@@ -292,6 +293,38 @@ export default function ProfilePage({ user, onPageChange, onLogout }: ProfilePag
               </div>
               <span className="text-sm font-bold text-[#0f172a] tracking-tight">
                 My Rewards
+              </span>
+            </div>
+            <ChevronRight size={18} className="text-slate-700 group-hover:translate-x-0.5 transition-transform" />
+          </button>
+
+          {/* Card 7b: Leaderboard */}
+          <button
+            onClick={() => onPageChange(Page.LEADERBOARD)}
+            className="w-full bg-white hover:bg-slate-50 active:bg-slate-100 rounded-xl sm:rounded-2xl px-4 py-3.5 flex items-center justify-between border border-slate-200/90 shadow-xs group transition-all"
+          >
+            <div className="flex items-center gap-3.5">
+              <div className="text-amber-500">
+                <Trophy size={20} className="stroke-[2.2]" />
+              </div>
+              <span className="text-sm font-bold text-[#0f172a] tracking-tight">
+                Leaderboard & Rankings
+              </span>
+            </div>
+            <ChevronRight size={18} className="text-slate-700 group-hover:translate-x-0.5 transition-transform" />
+          </button>
+
+          {/* Card 7c: Game Modes */}
+          <button
+            onClick={() => onPageChange(Page.GAME_MODES)}
+            className="w-full bg-white hover:bg-slate-50 active:bg-slate-100 rounded-xl sm:rounded-2xl px-4 py-3.5 flex items-center justify-between border border-slate-200/90 shadow-xs group transition-all"
+          >
+            <div className="flex items-center gap-3.5">
+              <div className="text-purple-600">
+                <Gamepad2 size={20} className="stroke-[2.2]" />
+              </div>
+              <span className="text-sm font-bold text-[#0f172a] tracking-tight">
+                All Game Modes
               </span>
             </div>
             <ChevronRight size={18} className="text-slate-700 group-hover:translate-x-0.5 transition-transform" />

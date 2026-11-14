@@ -823,7 +823,7 @@ async function processZapUPIPayment(orderId: string, verifiedAmount: any, transa
       const userRef = firestore.collection('users').doc(userId);
 
       if (type === "PAYMENT_SUCCESS_WEBHOOK") {
-        await firestore.runTransaction(async (t) => {
+        await firestore.runTransaction(async (t: any) => {
           const transDoc = await t.get(transRef);
           
           if (transDoc.exists && transDoc.data()?.status === 'completed') {

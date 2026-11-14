@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Crown, Trophy, Wallet, ChevronRight, Zap, Star } from 'lucide-react';
+import { Crown, Trophy, Wallet, ChevronLeft, ChevronRight, Zap, Star } from 'lucide-react';
 import { db } from '../lib/firebase';
 import { collection, query, orderBy, limit, onSnapshot, getDocs, where } from 'firebase/firestore';
-import { User } from '../types';
+import { Page, User } from '../types';
 import SafeImage from '../components/SafeImage';
 
 const APP_LOGO = "/logo.png";
 
 type LeaderboardTab = 'weekly' | 'monthly';
 
-export default function Leaderboard() {
+interface LeaderboardProps {
+  onPageChange?: (page: Page, id?: string) => void;
+}
+
+export default function Leaderboard({ onPageChange }: LeaderboardProps) {
   const [activeTab, setActiveTab] = useState<LeaderboardTab>('weekly');
   const [loading, setLoading] = useState(true);
   const [allUsers, setAllUsers] = useState<Record<string, User>>({});
@@ -115,8 +119,21 @@ export default function Leaderboard() {
       </div>
 
       {/* Header Container */}
-      <header className="relative pt-12 pb-6 px-6 z-20 flex-none bg-[#050505]/80 backdrop-blur-md">
-        <div className="text-center mb-8">
+      <header className="relative pt-6 pb-6 px-6 z-20 flex-none bg-[#050505]/80 backdrop-blur-md">
+        {onPageChange && (
+          <div className="flex items-center justify-between mb-3">
+            <button
+              onClick={() => onPageChange(Page.HOME)}
+              className="w-9 h-9 rounded-xl bg-neutral-900 border border-white/10 flex items-center justify-center text-neutral-300 hover:text-white active:scale-95 transition-all"
+              title="Back to Home"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <span className="text-[9px] font-black uppercase tracking-[0.25em] text-neutral-500">SKETEL ARENA</span>
+            <div className="w-9" />
+          </div>
+        )}
+        <div className="text-center mb-6">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}

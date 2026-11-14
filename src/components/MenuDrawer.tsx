@@ -14,7 +14,9 @@ import {
   Shield,
   LogOut,
   ChevronRight,
-  Bell
+  Bell,
+  Gamepad2,
+  Crown
 } from 'lucide-react';
 import { Page, User as UserType } from '../types';
 
@@ -104,6 +106,28 @@ export default function MenuDrawer({
       action: () => {
         onClose();
         onPageChange(Page.TOURNAMENTS);
+      }
+    },
+    {
+      id: 'game_modes',
+      label: 'Game Modes',
+      desc: 'Explore all arena categories & modes',
+      icon: Gamepad2,
+      color: 'bg-violet-600/20 text-violet-400 border-violet-500/30',
+      action: () => {
+        onClose();
+        onPageChange(Page.GAME_MODES);
+      }
+    },
+    {
+      id: 'leaderboard',
+      label: 'Arena Leaderboard',
+      desc: 'Weekly & monthly top earners rankings',
+      icon: Crown,
+      color: 'bg-amber-600/20 text-amber-400 border-amber-500/30',
+      action: () => {
+        onClose();
+        onPageChange(Page.LEADERBOARD);
       }
     },
     {
